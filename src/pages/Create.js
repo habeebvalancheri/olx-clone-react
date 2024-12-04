@@ -1,12 +1,20 @@
-import React, { Fragment } from 'react';
-import Header from '../Components/Header/Header';
-import Create from '../Components/Create/Create';
+import React, { Fragment, useState } from 'react';
+import Header from '../components/Header/Header';
+import Create from '../components/Create/Create';
+
 
 const CreatePage = () => {
+
+  const [posts, setPosts] = useState([]);
+
+  const addPost = (newPost) => {
+    setPosts((prevPosts) => [...prevPosts, newPost]);
+  };
+
   return (
     <Fragment>
       <Header />
-      <Create/>
+      <Create addPost={addPost}/>
     </Fragment>
   );
 };

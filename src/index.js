@@ -1,5 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import {firebaseContext} from './contexts/firebaseContext';
+import firebase from './firebase/config';
+import AuthProvider from './contexts/firebaseContext';
+ReactDOM.render(
+  <firebaseContext.Provider value={{firebase}}>
+    <AuthProvider>
 
-ReactDOM.render(<App />, document.getElementById('root'));
+<App />
+    </AuthProvider>
+</firebaseContext.Provider>
+, document.getElementById('root'));

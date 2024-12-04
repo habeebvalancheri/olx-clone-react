@@ -1,4 +1,4 @@
-import react from 'react';
+import {useContext} from 'react';
 
 import './Header.css';
 
@@ -8,8 +8,24 @@ import Search from '../../assets/Search';
 import Arrow from '../../assets/Arrow';
 import SellButton from '../../assets/SellButton';
 import SellButtonPlus from '../../assets/SellButtonPlus';
+import { authContext } from '../../contexts/firebaseContext';
+import { useNavigate } from 'react-router-dom'; 
+import { signOut } from 'firebase/auth'; // Import signOut function
+import { auth } from '../../firebase/config'; 
 
 function Header(){
+
+  const navigate = useNavigate();
+  const {user} = useContext(authContext)
+  
+  const handleSellClick = () => {
+    if (user) {
+      navigate('/create');
+    } else {
+      navigate('/login');
+    }
+  };
+
   return(
     <div className='headerParentDiv'>
       <div className='headerChildDiv'>
@@ -35,14 +51,27 @@ function Header(){
           <Arrow></Arrow>
         </div>
         <div className='loginPage'>
-          <span> Login </span>
+          <span onClick={() => {
+            if(!user){
+              navigate('/login');
+            }
+          }}> {user? ` Welcome ${user.displayName}`:'Login'} </span>
           <hr/>
         </div>
-        <div className='sellMenu'>
+        {user && (<span onClick={() =>{
+          signOut(auth)
+          .then(() => {
+            navigate('/login');
+          })
+          .catch((error) => {
+            console.error('Error signing out:', error);
+          });
+      }}> Logout</span> )}
+        <div className='sellMenu' onClick={handleSellClick}>
           <SellButton></SellButton>
           <div className='sellMenuContent'>
             <SellButtonPlus></SellButtonPlus>
-            <span>SELL</span>
+            <span onClick={() => navigate('/create')}>SELL</span>
           </div>
         </div>
       </div>
